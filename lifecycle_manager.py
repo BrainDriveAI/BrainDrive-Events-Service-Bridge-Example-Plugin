@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-ServiceExample_Events Plugin Lifecycle Manager (New Architecture)
+PluginTemplate Plugin Lifecycle Manager (New Architecture)
 
-This script handles install/update/delete operations for the ServiceExample_Events plugin
+This script handles install/update/delete operations for the PluginTemplate plugin
 using the new multi-user plugin lifecycle management architecture.
 """
 
@@ -97,22 +97,22 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
     
     def __init__(self, plugins_base_dir: str = None):
         """Initialize the lifecycle manager"""
-        # ServiceExample_Events plugin-specific data
+        # Define plugin-specific data
         self.plugin_data = {
             "name": "ServiceExample_Events",
-            "description": "Comprehensive Event Service Bridge demonstration",
+            "description": "Simple example demonstrating Event Service usage for inter-module communication",
             "version": "1.0.0",
             "type": "frontend",
-            "icon": "Radio",
+            "icon": "MessageSquare",
             "category": "examples",
             "official": True,
-            "author": "BrainDrive",
+            "author": "BrainDrive Team",
             "compatibility": "1.0.0",
-            "scope": "ServiceExample_Events",
+            "scope": "ServiceExampleEvents",
             "bundle_method": "webpack",
             "bundle_location": "dist/remoteEntry.js",
             "is_local": False,
-            "long_description": "A comprehensive demonstration of all Event Service Bridge functionality in BrainDrive. Features 6 interactive modules showcasing local messaging, remote messaging, persistence, queuing, broadcasting, and real-time monitoring.",
+            "long_description": "A comprehensive example demonstrating how to use the Event Service in BrainDrive plugins for inter-module communication. Shows event publishing, subscribing, and monitoring patterns.",
             "plugin_slug": "ServiceExample_Events",
             # Update tracking fields (matching plugin model)
             "source_type": "github",
@@ -122,65 +122,26 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
             "update_available": False,
             "latest_version": None,
             "installation_type": "remote",
-            "permissions": ["event.access"]
+            "permissions": ["event.send", "event.subscribe"]
         }
         
-        # ServiceExample_Events module definitions
+        # Define module data for the three components
         self.module_data = [
             {
-                "name": "LeftChat",
-                "display_name": "Left Chat (Local Messaging)",
-                "description": "Demonstrates local event messaging patterns",
-                "icon": "MessageSquareText",
-                "category": "communication",
+                "name": "EventSender",
+                "display_name": "Event Sender",
+                "description": "Module that sends events to other modules",
+                "icon": "Send",
+                "category": "examples",
                 "priority": 1,
                 "props": {
-                    "title": "Left Chat",
-                    "placeholder": "Type your message...",
-                    "buttonText": "Send",
-                    "theme": "blue"
+                    "title": "Event Sender",
+                    "description": "Send events to other modules"
                 },
-                "config_fields": {
-                    "title": {
-                        "type": "text",
-                        "description": "Chat title",
-                        "default": "Left Chat"
-                    },
-                    "placeholder": {
-                        "type": "text",
-                        "description": "Input placeholder text",
-                        "default": "Type your message..."
-                    },
-                    "show_debug": {
-                        "type": "boolean",
-                        "description": "Show debug information",
-                        "default": True
-                    }
-                },
-                "messages": {
-                    "sends": [
-                        {
-                            "type": "chat.message",
-                            "description": "Chat message from left participant",
-                            "contentSchema": {
-                                "type": "object",
-                                "properties": {
-                                    "content": {"type": "string", "required": True},
-                                    "sender": {"type": "string", "required": True},
-                                    "timestamp": {"type": "string", "required": True}
-                                }
-                            }
-                        }
-                    ],
-                    "receives": [
-                        {
-                            "type": "chat.message",
-                            "description": "Chat message from right participant"
-                        }
-                    ]
-                },
+                "config_fields": {},
+                "messages": {},
                 "required_services": {
-                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                    "event": {"methods": ["sendMessage"], "version": "1.0.0"}
                 },
                 "dependencies": [],
                 "layout": {
@@ -189,54 +150,23 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
                     "defaultWidth": 4,
                     "defaultHeight": 4
                 },
-                "tags": ["events", "communication", "local", "chat"]
+                "tags": ["events", "sender", "example"]
             },
             {
-                "name": "RightChat",
-                "display_name": "Right Chat (Remote Messaging)",
-                "description": "Demonstrates remote messaging and persistence",
-                "icon": "MessageSquareText",
-                "category": "communication",
+                "name": "EventReceiver",
+                "display_name": "Event Receiver",
+                "description": "Module that receives and displays events",
+                "icon": "Inbox",
+                "category": "examples",
                 "priority": 2,
                 "props": {
-                    "title": "Right Chat",
-                    "placeholder": "Waiting for left chat...",
-                    "buttonText": "Send",
-                    "theme": "green"
+                    "title": "Event Receiver",
+                    "description": "Receive and display events from other modules"
                 },
-                "config_fields": {
-                    "title": {
-                        "type": "text",
-                        "description": "Chat title",
-                        "default": "Right Chat"
-                    },
-                    "enable_persistence": {
-                        "type": "boolean",
-                        "description": "Enable message persistence",
-                        "default": True
-                    },
-                    "remote_mode": {
-                        "type": "boolean",
-                        "description": "Use remote messaging",
-                        "default": True
-                    }
-                },
-                "messages": {
-                    "sends": [
-                        {
-                            "type": "chat.message",
-                            "description": "Chat message from right participant"
-                        }
-                    ],
-                    "receives": [
-                        {
-                            "type": "chat.message",
-                            "description": "Chat message from left participant"
-                        }
-                    ]
-                },
+                "config_fields": {},
+                "messages": {},
                 "required_services": {
-                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
                 },
                 "dependencies": [],
                 "layout": {
@@ -245,46 +175,21 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
                     "defaultWidth": 4,
                     "defaultHeight": 4
                 },
-                "tags": ["events", "communication", "remote", "persistence", "chat"]
+                "tags": ["events", "receiver", "example"]
             },
             {
-                "name": "ChatHistory",
-                "display_name": "Chat History (Persistence Demo)",
-                "description": "Demonstrates message persistence and queue replay",
-                "icon": "History",
-                "category": "display",
+                "name": "EventDisplay",
+                "display_name": "Event Display",
+                "description": "Module that shows event history and monitoring",
+                "icon": "Activity",
+                "category": "examples",
                 "priority": 3,
                 "props": {
-                    "title": "Chat History",
-                    "maxMessages": 100,
-                    "showTimestamps": True,
-                    "autoScroll": True
+                    "title": "Event Display",
+                    "description": "Monitor and display event activity"
                 },
-                "config_fields": {
-                    "max_messages": {
-                        "type": "number",
-                        "description": "Maximum messages to display",
-                        "default": 100
-                    },
-                    "show_timestamps": {
-                        "type": "boolean",
-                        "description": "Show message timestamps",
-                        "default": True
-                    },
-                    "auto_scroll": {
-                        "type": "boolean",
-                        "description": "Auto-scroll to latest message",
-                        "default": True
-                    }
-                },
-                "messages": {
-                    "receives": [
-                        {
-                            "type": "chat.message",
-                            "description": "All chat messages for display"
-                        }
-                    ]
-                },
+                "config_fields": {},
+                "messages": {},
                 "required_services": {
                     "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
                 },
@@ -292,150 +197,15 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
                 "layout": {
                     "minWidth": 4,
                     "minHeight": 4,
-                    "defaultWidth": 6,
-                    "defaultHeight": 6
-                },
-                "tags": ["events", "display", "persistence", "history"]
-            },
-            {
-                "name": "EventMonitor",
-                "display_name": "Event Monitor",
-                "description": "Real-time event tracking and debugging",
-                "icon": "Activity",
-                "category": "monitoring",
-                "priority": 4,
-                "props": {
-                    "title": "Event Monitor",
-                    "maxEvents": 50,
-                    "showDebugInfo": True
-                },
-                "config_fields": {
-                    "max_events": {
-                        "type": "number",
-                        "description": "Maximum events to display",
-                        "default": 50
-                    },
-                    "show_debug_info": {
-                        "type": "boolean",
-                        "description": "Show detailed debug information",
-                        "default": True
-                    },
-                    "filter_events": {
-                        "type": "text",
-                        "description": "Event type filter (comma-separated)",
-                        "default": ""
-                    }
-                },
-                "messages": {
-                    "receives": [
-                        {
-                            "type": "*",
-                            "description": "All event types for monitoring"
-                        }
-                    ]
-                },
-                "required_services": {
-                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
-                },
-                "dependencies": [],
-                "layout": {
-                    "minWidth": 4,
-                    "minHeight": 3,
                     "defaultWidth": 5,
-                    "defaultHeight": 4
-                },
-                "tags": ["events", "monitoring", "debugging", "real-time"]
-            },
-            {
-                "name": "MessageQueue",
-                "display_name": "Message Queue Visualizer",
-                "description": "Message queue management and visualization",
-                "icon": "List",
-                "category": "monitoring",
-                "priority": 5,
-                "props": {
-                    "title": "Message Queue",
-                    "showQueueStats": True
-                },
-                "config_fields": {
-                    "show_queue_stats": {
-                        "type": "boolean",
-                        "description": "Show queue statistics",
-                        "default": True
-                    },
-                    "queue_limit": {
-                        "type": "number",
-                        "description": "Maximum queue size",
-                        "default": 100
-                    }
-                },
-                "messages": {
-                    "receives": [
-                        {
-                            "type": "queue.*",
-                            "description": "Queue management messages"
-                        }
-                    ]
-                },
-                "required_services": {
-                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
-                },
-                "dependencies": [],
-                "layout": {
-                    "minWidth": 3,
-                    "minHeight": 3,
-                    "defaultWidth": 4,
                     "defaultHeight": 5
                 },
-                "tags": ["events", "queue", "visualization", "management"]
-            },
-            {
-                "name": "BroadcastCenter",
-                "display_name": "Broadcast Center",
-                "description": "Multi-target message broadcasting",
-                "icon": "Radio",
-                "category": "communication",
-                "priority": 6,
-                "props": {
-                    "title": "Broadcast Center",
-                    "defaultTargets": ["left-chat", "right-chat", "chat-history"]
-                },
-                "config_fields": {
-                    "default_targets": {
-                        "type": "text",
-                        "description": "Default broadcast targets (comma-separated)",
-                        "default": "left-chat,right-chat,chat-history"
-                    },
-                    "confirm_broadcasts": {
-                        "type": "boolean",
-                        "description": "Confirm before broadcasting",
-                        "default": True
-                    }
-                },
-                "messages": {
-                    "sends": [
-                        {
-                            "type": "broadcast.announcement",
-                            "description": "Broadcast message to multiple targets"
-                        }
-                    ]
-                },
-                "required_services": {
-                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
-                },
-                "dependencies": [],
-                "layout": {
-                    "minWidth": 4,
-                    "minHeight": 3,
-                    "defaultWidth": 5,
-                    "defaultHeight": 4
-                },
-                "tags": ["events", "broadcast", "multi-target", "communication"]
+                "tags": ["events", "monitor", "display", "example"]
             }
         ]
         
         # Initialize base class with required parameters
-        logger.info(f"ServiceExample_Events: plugins_base_dir - {plugins_base_dir}")
+        logger.info(f"PluginTemplate: plugins_base_dir - {plugins_base_dir}")
         if plugins_base_dir:
             # When instantiated by the remote installer, plugins_base_dir points to the plugins directory
             # Shared plugins are stored under plugins_base_dir/shared/plugin_slug/version
@@ -444,7 +214,7 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
             # When running from the PluginBuild directory during development,
             # resolve the path to backend/plugins/shared
             shared_path = Path(__file__).parent.parent.parent / "backend" / "plugins" / "shared" / self.plugin_data['plugin_slug'] / f"v{self.plugin_data['version']}"
-        logger.info(f"ServiceExample_Events: shared_path - {shared_path}")
+        logger.info(f"PluginTemplate: shared_path - {shared_path}")
         super().__init__(
             plugin_slug=self.plugin_data['plugin_slug'],
             version=self.plugin_data['version'],
@@ -1158,7 +928,7 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
             logger.error(f"PluginTemplate: Error checking plugin status: {e}")
             return {'exists': False, 'status': 'error', 'error': str(e)}
     
-    async def update_plugin(self, user_id: str, db: AsyncSession, new_version_manager: 'PluginTemplateLifecycleManager') -> Dict[str, Any]:
+    async def update_plugin(self, user_id: str, db: AsyncSession, new_version_manager: 'ServiceExampleEventsLifecycleManager') -> Dict[str, Any]:
         """Update PluginTemplate plugin for user (compatibility method)"""
         try:
             # Export current user data
@@ -1194,19 +964,19 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
 
 # Standalone functions for compatibility with remote installer
 async def install_plugin(user_id: str, db: AsyncSession, plugins_base_dir: str = None) -> Dict[str, Any]:
-    manager = PluginTemplateLifecycleManager(plugins_base_dir)
+    manager = ServiceExampleEventsLifecycleManager(plugins_base_dir)
     return await manager.install_plugin(user_id, db)
 
 async def delete_plugin(user_id: str, db: AsyncSession, plugins_base_dir: str = None) -> Dict[str, Any]:
-    manager = PluginTemplateLifecycleManager(plugins_base_dir)
+    manager = ServiceExampleEventsLifecycleManager(plugins_base_dir)
     return await manager.delete_plugin(user_id, db)
 
 async def get_plugin_status(user_id: str, db: AsyncSession, plugins_base_dir: str = None) -> Dict[str, Any]:
-    manager = PluginTemplateLifecycleManager(plugins_base_dir)
+    manager = ServiceExampleEventsLifecycleManager(plugins_base_dir)
     return await manager.get_plugin_status(user_id, db)
 
-async def update_plugin(user_id: str, db: AsyncSession, new_version_manager: 'PluginTemplateLifecycleManager', plugins_base_dir: str = None) -> Dict[str, Any]:
-    old_manager = PluginTemplateLifecycleManager(plugins_base_dir)
+async def update_plugin(user_id: str, db: AsyncSession, new_version_manager: 'ServiceExampleEventsLifecycleManager', plugins_base_dir: str = None) -> Dict[str, Any]:
+    old_manager = ServiceExampleEventsLifecycleManager(plugins_base_dir)
     return await old_manager.update_plugin(user_id, db, new_version_manager)
 
 

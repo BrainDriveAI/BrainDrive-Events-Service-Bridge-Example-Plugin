@@ -1,55 +1,26 @@
 {
-  "name": "service-example-events",
+  "name": "serviceexample-events",
   "version": "1.0.0",
-  "description": "Comprehensive Event Service Bridge demonstration for BrainDrive",
-  "main": "dist/remoteEntry.js",
+  "description": "Simple example demonstrating Event Service usage",
+  "main": "dist/index.js",
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "start": "webpack serve --mode development",
     "clean": "rm -rf dist"
   },
-  "keywords": [
-    "braindrive",
-    "plugin",
-    "events",
-    "communication",
-    "example",
-    "chat",
-    "monitoring",
-    "queue",
-    "broadcast",
-    "react",
-    "typescript"
-  ],
-  "author": "BrainDrive",
-  "license": "MIT",
-  "homepage": "https://github.com/DJJones66/ServiceExample_Events",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/DJJones66/ServiceExample_Events.git"
-  },
-  "bugs": {
-    "url": "https://github.com/DJJones66/ServiceExample_Events/issues"
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "css-loader": "^6.8.1",
-    "html-webpack-plugin": "^5.5.3",
-    "style-loader": "^3.3.3",
-    "ts-loader": "^9.4.4",
-    "typescript": "^5.1.6",
-    "webpack": "^5.88.2",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^4.15.1"
-  },
-  "dependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
-  },
-  "peerDependencies": {
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "typescript": "^5.7.3",
+    "ts-loader": "^9.5.2",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "html-webpack-plugin": "^5.6.3"
   }
 }

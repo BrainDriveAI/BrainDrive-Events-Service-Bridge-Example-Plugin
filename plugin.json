@@ -1,0 +1,47 @@
+{
+  "name": "ServiceExample_Events",
+  "version": "1.0.0",
+  "description": "Simple example demonstrating Event Service usage for inter-module communication",
+  "author": "BrainDrive Team",
+  "main": "dist/index.js",
+  "type": "module",
+  "category": "examples",
+  "tags": ["events", "service-bridge", "example", "communication"],
+  "permissions": {
+    "services": ["events"],
+    "storage": false,
+    "network": false
+  },
+  "modules": [
+    {
+      "id": "event-sender",
+      "name": "Event Sender",
+      "description": "Module that sends events to other modules",
+      "component": "EventSender",
+      "defaultSize": {
+        "width": 300,
+        "height": 250
+      }
+    },
+    {
+      "id": "event-receiver",
+      "name": "Event Receiver", 
+      "description": "Module that receives and displays events",
+      "component": "EventReceiver",
+      "defaultSize": {
+        "width": 300,
+        "height": 250
+      }
+    },
+    {
+      "id": "event-display",
+      "name": "Event Display",
+      "description": "Module that shows event history",
+      "component": "EventDisplay",
+      "defaultSize": {
+        "width": 400,
+        "height": 300
+      }
+    }
+  ]
+}

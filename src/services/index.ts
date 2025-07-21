@@ -1,12 +1,7 @@
-/**
- * ServiceExample_Events Services
- *
- * Exports all services used by the ServiceExample_Events plugin
- */
+// TEMPLATE: Service exports
+// TODO: Add your custom services here
 
-export {
-  ServiceExampleEventService,
-  EventServiceWrapper,
-  createEventService,
-  defaultEventService
-} from './eventService';
+export { default as PluginService } from './PluginService';
+
+// TODO: Export your custom services
+// export { default as YourCustomService } from './YourCustomService';
