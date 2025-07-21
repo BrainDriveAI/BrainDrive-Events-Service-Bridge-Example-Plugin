@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-PluginTemplate Plugin Lifecycle Manager (New Architecture)
+ServiceExample_Events Plugin Lifecycle Manager (New Architecture)
 
-This script handles install/update/delete operations for the PluginTemplate plugin
+This script handles install/update/delete operations for the ServiceExample_Events plugin
 using the new multi-user plugin lifecycle management architecture.
 """
 
@@ -116,8 +116,8 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
             "plugin_slug": "ServiceExample_Events",
             # Update tracking fields (matching plugin model)
             "source_type": "github",
-            "source_url": "https://github.com/BrainDrive/ServiceExample_Events",
-            "update_check_url": "https://api.github.com/repos/BrainDrive/ServiceExample_Events/releases/latest",
+            "source_url": "https://github.com/DJJones66/ServiceExample_Events",
+            "update_check_url": "https://api.github.com/repos/DJJones66/ServiceExample_Events/releases/latest",
             "last_update_check": None,
             "update_available": False,
             "latest_version": None,

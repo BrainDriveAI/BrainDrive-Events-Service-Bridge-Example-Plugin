@@ -24,6 +24,14 @@
   ],
   "author": "BrainDrive",
   "license": "MIT",
+  "homepage": "https://github.com/DJJones66/ServiceExample_Events",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DJJones66/ServiceExample_Events.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DJJones66/ServiceExample_Events/issues"
+  },
   "devDependencies": {
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
