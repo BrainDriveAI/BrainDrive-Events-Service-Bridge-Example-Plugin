@@ -1,0 +1,355 @@
+/**
+ * LeftChat Component Styles
+ * 
+ * Styles specific to the LeftChat component (Local Messaging Demo)
+ * Uses blue theme to indicate local messaging functionality
+ */
+
+.left-chat {
+  --module-primary: #2196F3;
+  --module-primary-light: #E3F2FD;
+  --module-primary-dark: #1565C0;
+  --module-background: #F8FBFF;
+  --module-border: #BBDEFB;
+  --module-text: #1565C0;
+  --module-text-secondary: #1976D2;
+}
+
+.left-chat .module-container {
+  border-left: 4px solid var(--module-primary);
+  background: linear-gradient(135deg, var(--module-background) 0%, #ffffff 100%);
+}
+
+.left-chat .module-badge {
+  background-color: var(--module-primary);
+  color: white;
+}
+
+/* ============================================================================
+   CONTENT LAYOUT
+   ============================================================================ */
+
+.left-chat-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.stats-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background-color: var(--module-primary-light);
+  border-radius: 6px;
+  border: 1px solid var(--module-border);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--module-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 500;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--module-primary);
+}
+
+/* ============================================================================
+   INPUT SECTION
+   ============================================================================ */
+
+.input-section {
+  margin-bottom: 16px;
+}
+
+.input-with-button {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+
+.input-with-button .input-field {
+  flex: 1;
+  border-color: var(--module-border);
+}
+
+.input-with-button .input-field:focus {
+  border-color: var(--module-primary);
+  box-shadow: 0 0 0 2px var(--module-primary-light);
+}
+
+.input-with-button .input-field:disabled {
+  background-color: #f5f5f5;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.input-with-button .btn {
+  min-width: 80px;
+  background-color: var(--module-primary);
+  border-color: var(--module-primary);
+}
+
+.input-with-button .btn:hover:not(:disabled) {
+  background-color: var(--module-primary-dark);
+  border-color: var(--module-primary-dark);
+}
+
+.input-with-button .btn:disabled {
+  background-color: #ccc;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* ============================================================================
+   STATUS INDICATORS
+   ============================================================================ */
+
+.status-indicator-group {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.left-chat .status-enabled {
+  background-color: var(--module-primary-light);
+  color: var(--module-primary-dark);
+  border: 1px solid var(--module-primary);
+}
+
+.left-chat .status-disabled {
+  background-color: #FFEBEE;
+  color: #C62828;
+  border: 1px solid #FFCDD2;
+}
+
+.left-chat .status-enabled .status-dot {
+  background-color: var(--module-primary);
+  animation: pulse 2s infinite;
+}
+
+.left-chat .status-disabled .status-dot {
+  background-color: #C62828;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* ============================================================================
+   FEATURE DESCRIPTION
+   ============================================================================ */
+
+.feature-description {
+  background-color: white;
+  border: 1px solid var(--module-border);
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.feature-description h4 {
+  margin: 0 0 8px 0;
+  color: var(--module-text);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.feature-description ul {
+  margin: 0;
+  padding-left: 16px;
+  font-size: 12px;
+  color: var(--module-text-secondary);
+  line-height: 1.4;
+}
+
+.feature-description li {
+  margin-bottom: 4px;
+}
+
+.feature-description code {
+  background-color: var(--module-primary-light);
+  color: var(--module-primary-dark);
+  padding: 2px 4px;
+  border-radius: 3px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+}
+
+/* ============================================================================
+   DEBUG PANEL
+   ============================================================================ */
+
+.debug-panel {
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  padding: 12px;
+  margin-top: 16px;
+}
+
+.debug-title {
+  color: #00ff00;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.debug-log {
+  max-height: 150px;
+  overflow-y: auto;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.debug-entry {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 2px;
+  padding: 2px 0;
+}
+
+.debug-timestamp {
+  color: #888;
+  min-width: 60px;
+  font-size: 10px;
+}
+
+.debug-content {
+  flex: 1;
+}
+
+.debug-info { color: #00ff00; }
+.debug-warn { color: #ffff00; }
+.debug-error { color: #ff0000; }
+.debug-debug { color: #00ffff; }
+
+/* ============================================================================
+   RESPONSIVE DESIGN
+   ============================================================================ */
+
+@media (max-width: 768px) {
+  .stats-row {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .stat-item {
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  
+  .input-with-button {
+    flex-direction: column;
+  }
+  
+  .input-with-button .btn {
+    min-width: auto;
+  }
+  
+  .debug-log {
+    max-height: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-chat .module-container {
+    padding: 12px;
+  }
+  
+  .feature-description {
+    padding: 8px;
+  }
+  
+  .feature-description ul {
+    padding-left: 12px;
+  }
+  
+  .debug-panel {
+    padding: 8px;
+  }
+}
+
+/* ============================================================================
+   DARK THEME SUPPORT
+   ============================================================================ */
+
+.left-chat.dark-theme {
+  --module-background: #1e2a3a;
+  --module-border: #2d4a6b;
+  --module-text: #64b5f6;
+  --module-text-secondary: #90caf9;
+}
+
+.left-chat.dark-theme .module-container {
+  background: linear-gradient(135deg, var(--module-background) 0%, #1a1a1a 100%);
+  border-color: var(--module-border);
+}
+
+.left-chat.dark-theme .stats-row {
+  background-color: rgba(33, 150, 243, 0.1);
+  border-color: var(--module-border);
+}
+
+.left-chat.dark-theme .feature-description {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-color: var(--module-border);
+  color: var(--module-text-secondary);
+}
+
+.left-chat.dark-theme .input-field {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-color: var(--module-border);
+  color: white;
+}
+
+.left-chat.dark-theme .input-field::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+.left-chat .btn:focus-visible,
+.left-chat .input-field:focus-visible {
+  outline: 2px solid var(--module-primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .left-chat .status-enabled .status-dot {
+    animation: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .left-chat .module-container {
+    border-width: 2px;
+  }
+  
+  .left-chat .btn {
+    border: 2px solid currentColor;
+  }
+  
+  .left-chat .input-field {
+    border-width: 2px;
+  }
+}

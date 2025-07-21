@@ -92,164 +92,350 @@ except ImportError:
         raise ImportError("PluginTemplate plugin requires the new architecture BaseLifecycleManager")
 
 
-class PluginTemplateLifecycleManager(BaseLifecycleManager):
-    """Lifecycle manager for PluginTemplate plugin using new architecture"""
+class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
+    """Lifecycle manager for ServiceExample_Events plugin using new architecture"""
     
     def __init__(self, plugins_base_dir: str = None):
         """Initialize the lifecycle manager"""
-        # TEMPLATE: Define plugin-specific data - TODO: Customize for your plugin
+        # ServiceExample_Events plugin-specific data
         self.plugin_data = {
-            "name": "PluginTemplate",
-            "description": "A template for creating BrainDrive plugins",
+            "name": "ServiceExample_Events",
+            "description": "Comprehensive Event Service Bridge demonstration",
             "version": "1.0.0",
             "type": "frontend",
-            "icon": "Puzzle",  # TODO: Choose an appropriate icon
-            "category": "template",  # TODO: Choose appropriate category
-            "official": False,  # TODO: Set to True if this is an official plugin
-            "author": "BrainDrive",  # TODO: Update with your name/organization
+            "icon": "Radio",
+            "category": "examples",
+            "official": True,
+            "author": "BrainDrive",
             "compatibility": "1.0.0",
-            "scope": "PluginTemplate",  # TODO: Update scope name
+            "scope": "ServiceExample_Events",
             "bundle_method": "webpack",
             "bundle_location": "dist/remoteEntry.js",
             "is_local": False,
-            "long_description": "A comprehensive template for creating BrainDrive plugins with React, TypeScript, and Module Federation. Includes examples of service integration, theme support, and component patterns.",
-            "plugin_slug": "PluginTemplate",  # TODO: Update plugin slug
+            "long_description": "A comprehensive demonstration of all Event Service Bridge functionality in BrainDrive. Features 6 interactive modules showcasing local messaging, remote messaging, persistence, queuing, broadcasting, and real-time monitoring.",
+            "plugin_slug": "ServiceExample_Events",
             # Update tracking fields (matching plugin model)
-            "source_type": "github",  # TODO: Update if using different source
-            "source_url": "https://github.com/YourUsername/PluginTemplate",  # TODO: Update URL
-            "update_check_url": "https://api.github.com/repos/YourUsername/PluginTemplate/releases/latest",  # TODO: Update URL
+            "source_type": "github",
+            "source_url": "https://github.com/BrainDrive/ServiceExample_Events",
+            "update_check_url": "https://api.github.com/repos/BrainDrive/ServiceExample_Events/releases/latest",
             "last_update_check": None,
             "update_available": False,
             "latest_version": None,
             "installation_type": "remote",
-            "permissions": ["storage.read", "storage.write", "api.access"]  # TODO: Customize permissions
+            "permissions": ["event.access"]
         }
         
-        # TEMPLATE: Define module data - TODO: Customize for your plugin's modules
+        # ServiceExample_Events module definitions
         self.module_data = [
             {
-                "name": "PluginTemplate",  # TODO: Update module name
-                "display_name": "Plugin Template",  # TODO: Update display name
-                "description": "A template component for BrainDrive plugins",  # TODO: Update description
-                "icon": "Puzzle",  # TODO: Choose appropriate icon
-                "category": "template",  # TODO: Choose appropriate category
+                "name": "LeftChat",
+                "display_name": "Left Chat (Local Messaging)",
+                "description": "Demonstrates local event messaging patterns",
+                "icon": "MessageSquareText",
+                "category": "communication",
                 "priority": 1,
                 "props": {
-                    # TODO: Define default props for your plugin
-                    "title": "Plugin Template",
-                    "description": "A template for BrainDrive plugins",
-                    "config": {
-                        "refreshInterval": 60000,
-                        "showAdvancedOptions": False,
-                        "customSetting": "default"
-                    }
+                    "title": "Left Chat",
+                    "placeholder": "Type your message...",
+                    "buttonText": "Send",
+                    "theme": "blue"
                 },
                 "config_fields": {
-                    # TODO: Define configuration fields for your plugin
                     "title": {
                         "type": "text",
-                        "description": "Plugin title",
-                        "default": "Plugin Template"
+                        "description": "Chat title",
+                        "default": "Left Chat"
                     },
-                    "description": {
+                    "placeholder": {
                         "type": "text",
-                        "description": "Plugin description",
-                        "default": "A template for BrainDrive plugins"
+                        "description": "Input placeholder text",
+                        "default": "Type your message..."
                     },
-                    "refresh_interval": {
-                        "type": "number",
-                        "description": "Data refresh interval in milliseconds",
-                        "default": 60000
-                    },
-                    "show_advanced_options": {
+                    "show_debug": {
                         "type": "boolean",
-                        "description": "Show advanced configuration options",
-                        "default": False
-                    },
-                    "custom_setting": {
-                        "type": "text",
-                        "description": "Custom setting example",
-                        "default": "default"
+                        "description": "Show debug information",
+                        "default": True
                     }
                 },
-                "messages": {},
+                "messages": {
+                    "sends": [
+                        {
+                            "type": "chat.message",
+                            "description": "Chat message from left participant",
+                            "contentSchema": {
+                                "type": "object",
+                                "properties": {
+                                    "content": {"type": "string", "required": True},
+                                    "sender": {"type": "string", "required": True},
+                                    "timestamp": {"type": "string", "required": True}
+                                }
+                            }
+                        }
+                    ],
+                    "receives": [
+                        {
+                            "type": "chat.message",
+                            "description": "Chat message from right participant"
+                        }
+                    ]
+                },
                 "required_services": {
-                    # TODO: Define which BrainDrive services your plugin requires
-                    "api": {"methods": ["get", "post", "put", "delete"], "version": "1.0.0"},
-                    "theme": {"methods": ["getCurrentTheme", "addThemeChangeListener", "removeThemeChangeListener"], "version": "1.0.0"},
-                    "settings": {"methods": ["getSetting", "setSetting", "getSettingDefinitions"], "version": "1.0.0"},
-                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"},
-                    "pageContext": {"methods": ["getCurrentPageContext", "onPageContextChange"], "version": "1.0.0"}
+                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
                 },
                 "dependencies": [],
                 "layout": {
-                    # TODO: Define layout constraints for your plugin
+                    "minWidth": 3,
+                    "minHeight": 3,
+                    "defaultWidth": 4,
+                    "defaultHeight": 4
+                },
+                "tags": ["events", "communication", "local", "chat"]
+            },
+            {
+                "name": "RightChat",
+                "display_name": "Right Chat (Remote Messaging)",
+                "description": "Demonstrates remote messaging and persistence",
+                "icon": "MessageSquareText",
+                "category": "communication",
+                "priority": 2,
+                "props": {
+                    "title": "Right Chat",
+                    "placeholder": "Waiting for left chat...",
+                    "buttonText": "Send",
+                    "theme": "green"
+                },
+                "config_fields": {
+                    "title": {
+                        "type": "text",
+                        "description": "Chat title",
+                        "default": "Right Chat"
+                    },
+                    "enable_persistence": {
+                        "type": "boolean",
+                        "description": "Enable message persistence",
+                        "default": True
+                    },
+                    "remote_mode": {
+                        "type": "boolean",
+                        "description": "Use remote messaging",
+                        "default": True
+                    }
+                },
+                "messages": {
+                    "sends": [
+                        {
+                            "type": "chat.message",
+                            "description": "Chat message from right participant"
+                        }
+                    ],
+                    "receives": [
+                        {
+                            "type": "chat.message",
+                            "description": "Chat message from left participant"
+                        }
+                    ]
+                },
+                "required_services": {
+                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                },
+                "dependencies": [],
+                "layout": {
+                    "minWidth": 3,
+                    "minHeight": 3,
+                    "defaultWidth": 4,
+                    "defaultHeight": 4
+                },
+                "tags": ["events", "communication", "remote", "persistence", "chat"]
+            },
+            {
+                "name": "ChatHistory",
+                "display_name": "Chat History (Persistence Demo)",
+                "description": "Demonstrates message persistence and queue replay",
+                "icon": "History",
+                "category": "display",
+                "priority": 3,
+                "props": {
+                    "title": "Chat History",
+                    "maxMessages": 100,
+                    "showTimestamps": True,
+                    "autoScroll": True
+                },
+                "config_fields": {
+                    "max_messages": {
+                        "type": "number",
+                        "description": "Maximum messages to display",
+                        "default": 100
+                    },
+                    "show_timestamps": {
+                        "type": "boolean",
+                        "description": "Show message timestamps",
+                        "default": True
+                    },
+                    "auto_scroll": {
+                        "type": "boolean",
+                        "description": "Auto-scroll to latest message",
+                        "default": True
+                    }
+                },
+                "messages": {
+                    "receives": [
+                        {
+                            "type": "chat.message",
+                            "description": "All chat messages for display"
+                        }
+                    ]
+                },
+                "required_services": {
+                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                },
+                "dependencies": [],
+                "layout": {
                     "minWidth": 4,
                     "minHeight": 4,
                     "defaultWidth": 6,
                     "defaultHeight": 6
                 },
-                "tags": ["template", "starter", "example"]  # TODO: Add relevant tags
+                "tags": ["events", "display", "persistence", "history"]
             },
             {
-                "name": "SettingsExample",
-                "display_name": "Plugin Template Settings",
-                "description": "Settings configuration for the Plugin Template",
-                "icon": "Settings",
-                "category": "Configuration",
-                "priority": 2,
+                "name": "EventMonitor",
+                "display_name": "Event Monitor",
+                "description": "Real-time event tracking and debugging",
+                "icon": "Activity",
+                "category": "monitoring",
+                "priority": 4,
                 "props": {
-                    "title": "Plugin Template Settings",
-                    "description": "Configure the behavior and appearance of the Plugin Template"
+                    "title": "Event Monitor",
+                    "maxEvents": 50,
+                    "showDebugInfo": True
                 },
                 "config_fields": {
-                    "api_endpoint": {
-                        "type": "text",
-                        "description": "API endpoint URL",
-                        "default": "https://api.example.com"
-                    },
-                    "enable_notifications": {
-                        "type": "boolean",
-                        "description": "Enable notifications",
-                        "default": True
-                    },
-                    "refresh_interval": {
+                    "max_events": {
                         "type": "number",
-                        "description": "Refresh interval in seconds",
-                        "default": 30
-                    },
-                    "max_items": {
-                        "type": "number",
-                        "description": "Maximum number of items to display",
+                        "description": "Maximum events to display",
                         "default": 50
                     },
-                    "theme": {
-                        "type": "select",
-                        "description": "Theme preference",
-                        "default": "auto",
-                        "options": ["auto", "light", "dark"]
+                    "show_debug_info": {
+                        "type": "boolean",
+                        "description": "Show detailed debug information",
+                        "default": True
+                    },
+                    "filter_events": {
+                        "type": "text",
+                        "description": "Event type filter (comma-separated)",
+                        "default": ""
                     }
                 },
-                "messages": {},
+                "messages": {
+                    "receives": [
+                        {
+                            "type": "*",
+                            "description": "All event types for monitoring"
+                        }
+                    ]
+                },
                 "required_services": {
-                    "settings": {"methods": ["getSetting", "setSetting"], "version": "1.0.0"},
-                    "api": {"methods": ["get", "post", "put", "delete"], "version": "1.0.0"},
-                    "theme": {"methods": ["getCurrentTheme", "addThemeChangeListener", "removeThemeChangeListener"], "version": "1.0.0"},
-
+                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
                 },
                 "dependencies": [],
                 "layout": {
-                    "minWidth": 6,
-                    "minHeight": 4,
-                    "defaultWidth": 8,
-                    "defaultHeight": 6
+                    "minWidth": 4,
+                    "minHeight": 3,
+                    "defaultWidth": 5,
+                    "defaultHeight": 4
                 },
-                "tags": ["settings", "plugin_template_settings"]  # Special "settings" tag makes this appear in Settings page
+                "tags": ["events", "monitoring", "debugging", "real-time"]
+            },
+            {
+                "name": "MessageQueue",
+                "display_name": "Message Queue Visualizer",
+                "description": "Message queue management and visualization",
+                "icon": "List",
+                "category": "monitoring",
+                "priority": 5,
+                "props": {
+                    "title": "Message Queue",
+                    "showQueueStats": True
+                },
+                "config_fields": {
+                    "show_queue_stats": {
+                        "type": "boolean",
+                        "description": "Show queue statistics",
+                        "default": True
+                    },
+                    "queue_limit": {
+                        "type": "number",
+                        "description": "Maximum queue size",
+                        "default": 100
+                    }
+                },
+                "messages": {
+                    "receives": [
+                        {
+                            "type": "queue.*",
+                            "description": "Queue management messages"
+                        }
+                    ]
+                },
+                "required_services": {
+                    "event": {"methods": ["subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                },
+                "dependencies": [],
+                "layout": {
+                    "minWidth": 3,
+                    "minHeight": 3,
+                    "defaultWidth": 4,
+                    "defaultHeight": 5
+                },
+                "tags": ["events", "queue", "visualization", "management"]
+            },
+            {
+                "name": "BroadcastCenter",
+                "display_name": "Broadcast Center",
+                "description": "Multi-target message broadcasting",
+                "icon": "Radio",
+                "category": "communication",
+                "priority": 6,
+                "props": {
+                    "title": "Broadcast Center",
+                    "defaultTargets": ["left-chat", "right-chat", "chat-history"]
+                },
+                "config_fields": {
+                    "default_targets": {
+                        "type": "text",
+                        "description": "Default broadcast targets (comma-separated)",
+                        "default": "left-chat,right-chat,chat-history"
+                    },
+                    "confirm_broadcasts": {
+                        "type": "boolean",
+                        "description": "Confirm before broadcasting",
+                        "default": True
+                    }
+                },
+                "messages": {
+                    "sends": [
+                        {
+                            "type": "broadcast.announcement",
+                            "description": "Broadcast message to multiple targets"
+                        }
+                    ]
+                },
+                "required_services": {
+                    "event": {"methods": ["sendMessage", "subscribeToMessages", "unsubscribeFromMessages"], "version": "1.0.0"}
+                },
+                "dependencies": [],
+                "layout": {
+                    "minWidth": 4,
+                    "minHeight": 3,
+                    "defaultWidth": 5,
+                    "defaultHeight": 4
+                },
+                "tags": ["events", "broadcast", "multi-target", "communication"]
             }
         ]
         
         # Initialize base class with required parameters
-        logger.info(f"PluginTemplate: plugins_base_dir - {plugins_base_dir}")
+        logger.info(f"ServiceExample_Events: plugins_base_dir - {plugins_base_dir}")
         if plugins_base_dir:
             # When instantiated by the remote installer, plugins_base_dir points to the plugins directory
             # Shared plugins are stored under plugins_base_dir/shared/plugin_slug/version
@@ -258,7 +444,7 @@ class PluginTemplateLifecycleManager(BaseLifecycleManager):
             # When running from the PluginBuild directory during development,
             # resolve the path to backend/plugins/shared
             shared_path = Path(__file__).parent.parent.parent / "backend" / "plugins" / "shared" / self.plugin_data['plugin_slug'] / f"v{self.plugin_data['version']}"
-        logger.info(f"PluginTemplate: shared_path - {shared_path}")
+        logger.info(f"ServiceExample_Events: shared_path - {shared_path}")
         super().__init__(
             plugin_slug=self.plugin_data['plugin_slug'],
             version=self.plugin_data['version'],
@@ -1034,7 +1220,7 @@ if __name__ == "__main__":
         print("=" * 50)
         
         # Test manager initialization
-        manager = PluginTemplateLifecycleManager()
+        manager = ServiceExampleEventsLifecycleManager()
         print(f"Plugin: {manager.plugin_data['name']}")
         print(f"Version: {manager.plugin_data['version']}")
         print(f"Slug: {manager.plugin_data['plugin_slug']}")

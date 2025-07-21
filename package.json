@@ -1,7 +1,7 @@
 {
-  "name": "plugin-template",
+  "name": "service-example-events",
   "version": "1.0.0",
-  "description": "BrainDrive Plugin Template - A minimal starter template for creating BrainDrive plugins",
+  "description": "Comprehensive Event Service Bridge demonstration for BrainDrive",
   "main": "dist/remoteEntry.js",
   "scripts": {
     "build": "webpack --mode production",
@@ -12,10 +12,15 @@
   "keywords": [
     "braindrive",
     "plugin",
-    "template",
+    "events",
+    "communication",
+    "example",
+    "chat",
+    "monitoring",
+    "queue",
+    "broadcast",
     "react",
-    "typescript",
-    "starter"
+    "typescript"
   ],
   "author": "BrainDrive",
   "license": "MIT",

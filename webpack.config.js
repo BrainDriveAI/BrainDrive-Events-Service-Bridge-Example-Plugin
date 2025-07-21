@@ -3,16 +3,16 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const { ModuleFederationPlugin } = require("webpack").container;
 const deps = require("./package.json").dependencies;
 
-// TEMPLATE: Customize these values for your plugin
-const PLUGIN_NAME = "PluginTemplate"; // TODO: Change this to your plugin name
-const PLUGIN_PORT = 3003; // TODO: Change this to an available port
+// ServiceExample_Events Plugin Configuration
+const PLUGIN_NAME = "ServiceExample_Events";
+const PLUGIN_PORT = 3004;
 
 module.exports = {
   mode: "development",
   entry: "./src/index",
   output: {
-    //path: path.resolve(__dirname, '/path to your install/BrainDrive/backend/plugins/shared/PluginTemplate/v1.0.0/dist'),
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, '/home/hacker/BrainDriveDev/BrainDrive/backend/plugins/shared/ServiceExample_Events/v1.0.0/dist'),
+    //path: path.resolve(__dirname, 'dist'),
     publicPath: "auto",
     clean: true,
     library: {
@@ -45,9 +45,15 @@ module.exports = {
       library: { type: "var", name: PLUGIN_NAME },
       filename: "remoteEntry.js",
       exposes: {
-        // TEMPLATE: Update the expose path to match your plugin name
-        [`./` + PLUGIN_NAME]: "./src/index",
-        "./SettingsExample": "./src/components/SettingsExample",
+        // Core chat modules
+        "./LeftChat": "./src/components/LeftChat/LeftChat",
+        "./RightChat": "./src/components/RightChat/RightChat",
+        "./ChatHistory": "./src/components/ChatHistory/ChatHistory",
+        
+        // Advanced event service modules
+        "./EventMonitor": "./src/components/EventMonitor/EventMonitor",
+        "./MessageQueue": "./src/components/MessageQueue/MessageQueue",
+        "./BroadcastCenter": "./src/components/BroadcastCenter/BroadcastCenter",
       },
       shared: {
         react: {
