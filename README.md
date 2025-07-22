@@ -4,7 +4,7 @@ A working demonstration plugin for BrainDrive's Event Service Bridge functionali
 
 ## 📸 Plugin Demo
 
-![Event Service Bridge Demo](/home/hacker/BrainDriveDev/BrainDrive/PluginBuild/ServiceExample_Events/screenshot/EventDemoPage.png)
+![Event Service Bridge Demo](screenshot/EventDemoPage.png)
 
 *The ServiceExample_Events plugin in action, showing real-time event communication between the Event Sender, Event Receiver, and Event Display modules.*
 
