@@ -43,83 +43,202 @@ After studying this plugin and guide, you will understand:
 ### Step 1: Service Integration
 
 ```typescript
-// In your component constructor
-constructor(props: YourProps) {
+// In your component constructor (from EventSender.tsx)
+constructor(props: EventSenderProps) {
   super(props);
   this.state = {
-    eventService: createEventService('YourPlugin', 'your-module-id')
+    message: '',
+    targetModule: 'event-receiver',
+    eventService: createEventService('ServiceExample_Events', 'event-sender'),
+    status: 'Initializing Event Service...',
+    isServiceConnected: false,
+    isLoading: false,
+    messagesSent: 0
   };
 }
 
-// In componentDidMount
+// In componentDidMount (from EventSender.tsx)
 componentDidMount() {
-  if (this.props.services?.event) {
-    this.state.eventService.setServiceBridge(this.props.services.event);
+  console.log('[EventSender] 📚 LEARNING: Component mounted, checking for Event Service...');
+  this.initializeEventService();
+}
+
+// Handle service availability changes (from EventSender.tsx)
+componentDidUpdate(prevProps: EventSenderProps) {
+  if (prevProps.services?.event !== this.props.services?.event) {
+    console.log('[EventSender] 📚 LEARNING: Event Service availability changed, reinitializing...');
+    this.initializeEventService();
   }
 }
 
-// Handle service availability changes
-componentDidUpdate(prevProps: YourProps) {
-  if (prevProps.services?.event !== this.props.services?.event) {
+// Initialize Event Service (from EventSender.tsx)
+initializeEventService = () => {
+  try {
     if (this.props.services?.event) {
       this.state.eventService.setServiceBridge(this.props.services.event);
+      this.setState({
+        status: '✅ Event Service connected and ready',
+        isServiceConnected: true
+      });
+    } else {
+      this.setState({
+        status: '⏳ Waiting for Event Service to become available...',
+        isServiceConnected: false
+      });
     }
+  } catch (error) {
+    this.setState({
+      status: `❌ Event Service initialization failed: ${error.message}`,
+      isServiceConnected: false
+    });
   }
-}
+};
 ```
 
 ### Step 2: Sending Events
 
 ```typescript
-// Basic message sending
-const messageData = {
-  type: 'your-message-type',
-  text: 'Your message content',
-  timestamp: new Date().toISOString(),
-  from: 'your-module-id'
-};
+// Message sending (from EventSender.tsx)
+handleSendMessage = async () => {
+  // Validate input
+  if (!this.state.message.trim()) {
+    this.setState({ status: '⚠️ Please enter a message to send' });
+    return;
+  }
 
-try {
-  this.state.eventService.sendMessage('target-module-id', messageData);
-  console.log('Message sent successfully');
-} catch (error) {
-  console.error('Failed to send message:', error);
-}
+  // Check service availability
+  if (!this.state.isServiceConnected) {
+    this.setState({ status: '❌ Event Service not connected' });
+    return;
+  }
+
+  try {
+    // Create message with proper structure (matches actual implementation)
+    const messageData = {
+      type: 'simple-message',
+      text: this.state.message.trim(),
+      timestamp: new Date().toISOString(),
+      from: 'event-sender',
+      messageNumber: this.state.messagesSent + 1,
+      targetModule: this.state.targetModule
+    };
+
+    // Send the message through Event Service
+    this.state.eventService.sendMessage(this.state.targetModule, messageData);
+    
+    // Update state on success
+    this.setState({
+      message: '',
+      status: `✅ Message sent to ${this.state.targetModule}`,
+      messagesSent: this.state.messagesSent + 1
+    });
+  } catch (error) {
+    this.setState({
+      status: `❌ Failed to send message: ${error.message}`
+    });
+  }
+};
 ```
 
 ### Step 3: Receiving Events
 
 ```typescript
-// Subscribe to messages
+// Subscribe to messages (from EventReceiver.tsx)
 componentDidMount() {
+  // Set up the event service bridge when services are available
   if (this.props.services?.event) {
     this.state.eventService.setServiceBridge(this.props.services.event);
+    console.log('[EventReceiver] Event service bridge initialized');
+    
+    // Subscribe to messages for this module
     this.state.eventService.subscribeToMessages(this.handleMessage);
+    console.log('[EventReceiver] Subscribed to messages');
   }
 }
 
-// Handle incoming messages
+componentDidUpdate(prevProps: EventReceiverProps) {
+  if (prevProps.services?.event !== this.props.services?.event) {
+    if (this.props.services?.event) {
+      this.state.eventService.setServiceBridge(this.props.services.event);
+      console.log('[EventReceiver] Event service bridge initialized');
+      
+      // Subscribe to messages for this module
+      this.state.eventService.subscribeToMessages(this.handleMessage);
+      console.log('[EventReceiver] Subscribed to messages');
+    }
+  }
+}
+
+// Handle incoming messages (from EventReceiver.tsx)
 handleMessage = (message: any) => {
-  console.log('Received message:', message);
-  // Process the message
-  this.setState({ 
-    messages: [...this.state.messages, message] 
-  });
+  console.log('[EventReceiver] Received message:', message);
+  
+  const receivedMessage: ReceivedMessage = {
+    id: `msg_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+    type: message.type || 'unknown',
+    text: message.text || 'No message content',
+    timestamp: message.timestamp || new Date().toISOString(),
+    from: message.from || 'unknown'
+  };
+
+  this.setState(prevState => ({
+    messages: [...prevState.messages, receivedMessage]
+  }));
 };
 
-// Clean up subscriptions
+// Clean up subscriptions (from EventReceiver.tsx)
 componentWillUnmount() {
-  this.state.eventService.unsubscribeAll();
+  // Cleanup on unmount
+  if (this.props.services?.event) {
+    this.state.eventService.unsubscribeFromMessages(this.handleMessage);
+    console.log('[EventReceiver] Unsubscribed from messages');
+  }
 }
 ```
 
 ## 📋 Message Structure
 
-### Standard Message Format
+### Standard Message Format (from eventService.ts)
 
 ```typescript
-interface EventMessage {
-  // Required fields
+interface EventMessage<T = any> {
+  /** The type of event (e.g., 'simple-message', 'broadcast', 'notification') */
+  type: string;
+  
+  /** Information about the message sender */
+  source: {
+    /** ID of the plugin that sent the message */
+    pluginId: string;
+    /** ID of the specific module that sent the message */
+    moduleId: string;
+    /** Whether this message originated from a remote source */
+    isRemote: boolean;
+  };
+  
+  /** Information about the message target */
+  target: {
+    /** ID of the target plugin (optional for same-plugin communication) */
+    pluginId?: string;
+    /** ID of the target module */
+    moduleId: string;
+    /** Whether this message should be sent to a remote target */
+    isRemote: boolean;
+  };
+  
+  /** The actual message content - can be any type */
+  content: T;
+  /** ISO timestamp when the message was created */
+  timestamp: string;
+  /** Unique identifier for this message */
+  id: string;
+}
+```
+
+### Simplified Message Format (used in components)
+
+```typescript
+// The components use a simplified format for ease of use
+interface SimpleMessage {
   type: string;           // Message type (e.g., 'simple-message', 'broadcast')
   text: string;           // Message content
   timestamp: string;      // ISO timestamp
@@ -129,17 +248,19 @@ interface EventMessage {
   messageNumber?: number; // Sequential message number
   targetModule?: string;  // Intended recipient
   isBroadcast?: boolean; // Whether this is a broadcast message
-  
-  // Metadata (added automatically by Event Service)
-  _source?: {
-    pluginId: string;
-    moduleId: string;
-  };
-  _metadata?: {
-    sentAt: string;
-    messageId: string;
-    options: EventOptions;
-  };
+}
+```
+
+### Received Message Format (from EventReceiver.tsx)
+
+```typescript
+// Format used by EventReceiver for displaying received messages
+interface ReceivedMessage {
+  id: string;        // Unique message ID
+  type: string;      // Message type
+  text: string;      // Message content
+  timestamp: string; // ISO timestamp
+  from: string;      // Sender module ID
 }
 ```
 
@@ -156,6 +277,69 @@ const localOnly = { remote: false };
 const remoteAndLocal = { remote: true };
 const persistent = { remote: false, persist: true };
 const remoteAndPersistent = { remote: true, persist: true };
+```
+
+### Step 4: Broadcast Messaging
+
+```typescript
+// Broadcast messaging (from EventSender.tsx)
+handleSendBroadcast = async () => {
+  // Check service availability
+  if (!this.state.isServiceConnected) {
+    this.setState({ status: '❌ Event Service not connected' });
+    return;
+  }
+
+  // Set loading state
+  this.setState({ isLoading: true, status: '📡 Broadcasting message...' });
+
+  try {
+    const broadcastData = {
+      type: 'broadcast',
+      text: this.state.message.trim() || 'Hello from Event Sender!',
+      timestamp: new Date().toISOString(),
+      from: 'event-sender',
+      // Additional metadata
+      messageNumber: this.state.messagesSent + 1,
+      isBroadcast: true
+    };
+
+    console.group('[EventSender] 📚 LEARNING: Sending Broadcast Message');
+    console.log('Broadcast Data:', broadcastData);
+    console.log('📚 This message will be sent to multiple modules');
+    console.log('📚 Targets: event-receiver, event-display');
+    console.groupEnd();
+
+    // Send to multiple targets
+    const targets = ['event-receiver', 'event-display'];
+    const sendPromises = targets.map(target => {
+      try {
+        this.state.eventService.sendMessage(target, broadcastData);
+        return Promise.resolve(target);
+      } catch (error) {
+        console.warn(`[EventSender] Failed to send to ${target}:`, error);
+        return Promise.reject({ target, error });
+      }
+    });
+
+    // Wait for all sends to complete (or fail)
+    await Promise.allSettled(sendPromises);
+    
+    // Update state on success
+    this.setState({
+      message: '', // Clear input
+      status: `✅ Broadcast sent to ${targets.length} modules`,
+      messagesSent: this.state.messagesSent + 1,
+      isLoading: false
+    });
+
+  } catch (error) {
+    this.setState({
+      status: `❌ Broadcast failed: ${error.message}`,
+      isLoading: false
+    });
+  }
+};
 ```
 
 ## 🎨 UI Patterns
@@ -196,38 +380,102 @@ const getStatusStyle = (status: string) => ({
 
 ## 🚨 Error Handling
 
-### Common Error Types
+### Custom Error Types (from eventService.ts)
 
 ```typescript
-// Service not available
-if (!this.state.eventService.isServiceAvailable()) {
-  throw new EventServiceError(
-    'Event Service not available. Ensure setServiceBridge() was called.',
-    'SERVICE_UNAVAILABLE'
-  );
-}
-
-// Invalid message format
-if (!EventValidator.validateMessage(message)) {
-  throw new EventServiceError('Invalid message format', 'INVALID_MESSAGE');
-}
-
-// Network/communication errors
-try {
-  this.state.eventService.sendMessage(targetId, message);
-} catch (error) {
-  if (error instanceof EventServiceError) {
-    console.error('Event Service Error:', error.code, error.message);
-  } else {
-    console.error('Unexpected error:', error);
+/**
+ * Custom error types for Event Service operations
+ */
+export class EventServiceError extends Error {
+  constructor(message: string, public code: string) {
+    super(message);
+    this.name = 'EventServiceError';
   }
+}
+```
+
+### Message Validation (from eventService.ts)
+
+```typescript
+/**
+ * Validation utilities for event messages
+ */
+export class EventValidator {
+  /**
+   * Validate that a message has required fields
+   */
+  static validateMessage(message: any): boolean {
+    if (!message || typeof message !== 'object') {
+      console.warn('[EventService] Invalid message: not an object');
+      return false;
+    }
+    
+    if (!message.type || typeof message.type !== 'string') {
+      console.warn('[EventService] Invalid message: missing or invalid type');
+      return false;
+    }
+    
+    return true;
+  }
+  
+  /**
+   * Validate event options
+   */
+  static validateOptions(options: EventOptions): boolean {
+    if (typeof options.remote !== 'boolean') {
+      console.warn('[EventService] Invalid options: remote must be boolean');
+      return false;
+    }
+    
+    if (options.persist !== undefined && typeof options.persist !== 'boolean') {
+      console.warn('[EventService] Invalid options: persist must be boolean');
+      return false;
+    }
+    
+    return true;
+  }
+}
+```
+
+### Error Handling Patterns (from components)
+
+```typescript
+// Service availability check (from EventSender.tsx)
+if (!this.state.isServiceConnected) {
+  this.setState({ status: '❌ Event Service not connected' });
+  return;
+}
+
+// Input validation (from EventSender.tsx)
+if (!this.state.message.trim()) {
+  this.setState({ status: '⚠️ Please enter a message to send' });
+  return;
+}
+
+// Try-catch for message sending (from EventSender.tsx)
+try {
+  this.state.eventService.sendMessage(this.state.targetModule, messageData);
+  this.setState({
+    status: `✅ Message sent to ${this.state.targetModule}`,
+    messagesSent: this.state.messagesSent + 1
+  });
+} catch (error) {
+  let errorMessage = 'Unknown error occurred';
+  if (error instanceof Error) {
+    errorMessage = `Error: ${error.message}`;
+  }
+  
+  this.setState({
+    status: `❌ ${errorMessage}`,
+    isLoading: false
+  });
 }
 ```
 
 ### Error Recovery Patterns
 
 ```typescript
-// Retry mechanism for failed sends
+// Retry mechanism for failed sends (example pattern)
 const sendWithRetry = async (targetId: string, message: any, maxRetries = 3) => {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {

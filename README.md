@@ -180,11 +180,10 @@ This plugin serves as a **reference implementation** for:
 - Use Event Display module to monitor all event activity
 - Verify module IDs match between sender and receiver
 
-## 📚 Related Documentation
+## 📚 Related Links
 
-- [BrainDrive Event Service Documentation](https://braindrive.ai/docs/services/events)
-- [BrainDrive Plugin Development Guide](https://braindrive.ai/docs/plugins)
-- [Service Bridge Integration Patterns](https://braindrive.ai/docs/services/bridge)
+- [BrainDrive](https://github.com/BrainDriveAI/BrainDrive)
+- [Service Bridge - Event Developers Guide](DEVELOPER_GUIDE.md)
 
 ---
 
