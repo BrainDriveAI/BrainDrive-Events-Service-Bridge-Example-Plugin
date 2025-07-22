@@ -14,7 +14,9 @@
     "noEmit": false,
     "jsx": "react-jsx",
     "module": "ESNext",
-    "declaration": true,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
     "outDir": "./dist"
   },
   "include": [
