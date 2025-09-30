@@ -101,7 +101,7 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
         self.plugin_data = {
             "name": "ServiceExample_Events",
             "description": "Simple example demonstrating Event Service usage for inter-module communication",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "type": "frontend",
             "icon": "MessageSquare",
             "category": "examples",
@@ -116,8 +116,8 @@ class ServiceExampleEventsLifecycleManager(BaseLifecycleManager):
             "plugin_slug": "ServiceExample_Events",
             # Update tracking fields (matching plugin model)
             "source_type": "github",
-            "source_url": "https://github.com/DJJones66/ServiceExample_Events",
-            "update_check_url": "https://api.github.com/repos/DJJones66/ServiceExample_Events/releases/latest",
+            "source_url": "https://github.com/BrainDriveAI/BrainDrive-Events-Service-Bridge-Example-Plugin",
+            "update_check_url": "https://api.github.com/repos/BrainDriveAI/BrainDrive-Events-Service-Bridge-Example-Plugin/releases/latest",
             "last_update_check": None,
             "update_available": False,
             "latest_version": None,
