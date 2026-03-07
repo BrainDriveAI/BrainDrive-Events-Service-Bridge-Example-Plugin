@@ -1,3 +1,7 @@
+> ⚠️ **This repository has been archived.** BrainDrive has evolved into the [Personal AI Architecture](https://personalaiarchitecture.org) — an MIT-licensed, open architecture for building personal AI systems with zero lock-in. See the [new repo](https://github.com/Personal-AI-Architecture/the-architecture) for the latest work.
+
+---
+
 # ServiceExample_Events - BrainDrive Event Service Bridge Demo
 
 A working demonstration plugin for BrainDrive's Event Service Bridge functionality. This plugin showcases real-time inter-module communication within the BrainDrive platform through three interactive components that send, receive, and monitor events.
